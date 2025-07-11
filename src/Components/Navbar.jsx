@@ -8,9 +8,9 @@ export default function Navbar(){
 </a>
 <ul className=" flex space-x-8">
   <li className="text-white px-4 py-1.5 font-mono  cursor-pointer hover:text-black ">About</li>
-  <button className="text-white  px-4 py-1.5 font-mono   cursor-pointer  hover:text-black  border-2 border-solid  border-blue-900 rounded-sm ">Login</button>
+  <button className="text-white   bg-indigo-600 hover:bg-white  px-4 py-1.5 font-mono   cursor-pointer  hover:text-black  border-2 border-solid  border-blue-900 rounded-sm ">Login</button>
 
-  <button className="text-white px-3.5 py-1.5 font-mono  cursor-pointer  hover:text-black  border-2 border-solid  border-blue-900 rounded-sm ">Register now?</button>
+  <button className="text-white bg-indigo-600 hover:bg-white px-3.5 py-1.5 font-mono  cursor-pointer  hover:text-black  border-2 border-solid border-blue-900 rounded-sm ">Register now?</button>
   
 </ul>
 </div>
