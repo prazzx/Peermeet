@@ -1,4 +1,6 @@
  import logo from '../Assets/logo.png'
+ import {Link,NavLink} from 'react-router'
+
 export default function Navbar(){
   return(
     <nav className='text-bg border-b-2 '>

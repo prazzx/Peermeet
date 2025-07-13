@@ -1,9 +1,8 @@
-import  hero from '../Assets/herosection.png'
-import hero2 from '../Assets/herosection2.png'
-import logo  from '../Assets/logo.png'
+import  hero from './Assets/herosection.png'
+import hero2 from './Assets/herosection2.png'
 export default function Body(){
     return(
-        <div className='' >
+        < >
         <section className="relative  "> 
                   
               {/*   main div  */}
@@ -41,27 +40,17 @@ export default function Body(){
     Connect with students sharing your hobbies, goals, and skills.</li>
     <li className='text-black text-[1.2rem] leading-7'> <span className=' text-blue-600  hover:text-sky-900 font-bold  flex '>Skill Exchange & Learning</span>
 Learn from others or teach what you know and earn.</li>
-   <li className='text-black text-[1.2rem] leading-7'>
-   <span className='font-bold  flex text-blue-600 hover:text-sky-900 cursor-pointer'>Smart Matching</span> 
-Our AI recommends the best matches for your goals.</li>
+   <li className='text-black text-[1.2rem] leading-7 '>
+   <span className='font-bold  flex text-blue-600 hover:text-sky-900 cursor-pointer ju' >Smart Matching</span> 
+Our Machine Learning algorithm recommends the best matches for your goals.</li>
    </ul>
    </div>
     </div>
 </div>
 
 </section>
-<footer className='bg-gray-500 text-gray-100 '>
-    <div className='grid grid-cols-3 gap-3 mx-auto py-12 px-6 '>
 
-        <img src = {logo} alt='logo' className= " w-40 h-40" ></img>
-        <p  className='col-span-3'>Connecting Students, Building Futures</p>
-        <p>© 2025 PeerMeet. All rights reserved.</p>
-   
 
-    </div>
-
-</footer>
-
-        </div>
+        </>
     )
 }
