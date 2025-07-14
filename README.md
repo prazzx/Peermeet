@@ -2,8 +2,8 @@
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue)]()
 [![License](https://img.shields.io/badge/license-MIT-green)]()
-[![Issues](https://img.shields.io/github/issues/yourusername/peermeet)]()
-[![Contributors](https://img.shields.io/github/contributors/yourusername/peermeet)]()
+[![Issues](https://img.shields.io/github/issues/prazzx/peermeet)]()
+[![Contributors](https://img.shields.io/github/contributors/prazzx/peermeet)]()
 
 ## Table of Contents
 
