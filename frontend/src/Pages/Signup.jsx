@@ -45,10 +45,12 @@ const Signup = () => {
         handleSuccess(message);
         setTimeout(()=>{
           navigate('/login');
-        }, 6000)
+        }, 2000)
       }else if(error){
         const details = error?.details[0].message;
         handleError(details);
+      }else if(!success){
+        handleError(message);
       }
 
     }
