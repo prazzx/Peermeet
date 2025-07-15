@@ -7,13 +7,14 @@ import About from './Pages/About'
 import Login from './Pages/Login'
 import { createBrowserRouter , RouterProvider } from 'react-router'
 import Signup from './Pages/Signup'
+import Reset from './Pages/Pwreset'
 
 const routing101 = createBrowserRouter([
   {
     path: '/'
     , element: <Root/>,
     children: [
-{ path:"", element:<Body/>} , { path:"About",element:<About/>}, { path:"login",element:<Login/>} , { path:"signup",element:<Signup/>}
+{ path:"", element:<Body/>} , { path:"About",element:<About/>}, { path:"login",element:<Login/>} , { path:"signup",element:<Signup/>} , { path:"forgotpassword",element:<Reset/>}
 
     ]  },
 ])
