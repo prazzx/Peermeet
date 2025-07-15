@@ -40,12 +40,15 @@ const Signup = () => {
         }
       )
       const result = await response.json();
-      const {success, message} = result;
+      const {success, message, error} = result;
       if(success){
         handleSuccess(message);
         setTimeout(()=>{
           navigate('/login');
         }, 6000)
+      }else if(error){
+        const details = error?.details[0].message;
+        handleError(details);
       }
 
     }
