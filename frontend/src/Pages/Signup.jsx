@@ -17,7 +17,7 @@ const Signup = () => {
   const handlechange = (e) => {
     const { name, value } = e.target;
     console.log(name, value);
-    const copysignupInfo = { ...signupInfo }; //Creating an object so that it can pass throgh the database
+    const copysignupInfo = { ...signupInfo }; //Creating an object so that it can passed to backend as json
     copysignupInfo[name] = value;
     setsignupInfo(copysignupInfo);
   }
@@ -36,7 +36,7 @@ const Signup = () => {
           headers:{
             'Content-type':'application/json'
           },
-          body: JSON.stringify(signupInfo)
+          body: JSON.stringify(signupInfo) //Sending string contents of json object created from input fields
         }
       )
       const result = await response.json();
