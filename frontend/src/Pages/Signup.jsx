@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ToastContainer } from 'react-toastify'
 import React, { useState } from 'react';
 import 'react-toastify/ReactToastify.css'
@@ -13,6 +13,7 @@ const Signup = () => {
     password: ''
   })
 
+  const navigate = useNavigate();
   const handlechange = (e) => {
     const { name, value } = e.target;
     console.log(name, value);
@@ -40,6 +41,12 @@ const Signup = () => {
       )
       const result = await response.json();
       const {success, message} = result;
+      if(success){
+        handleSuccess(message);
+        setTimeout(()=>{
+          navigate('/login');
+        }, 6000)
+      }
 
     }
     catch(err){
