@@ -16,11 +16,8 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
-<<<<<<< HEAD
     "firebase": "^11.10.0",
     "firebase-admin": "^13.4.0",
-=======
->>>>>>> 2e6b9bba5b3c19dfa964533b87bf860c8fff4458
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
