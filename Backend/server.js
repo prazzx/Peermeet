@@ -10,7 +10,7 @@ const Router = require('./Routes/AuthRouter');
 
 const PORT = process.env.PORT;
 
-app.get("/api", (req, res) => {
+app.get("/help", (req, res) => {
   res.send("Backend is working!");
 });
 
@@ -22,9 +22,9 @@ async function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
 console.log("Authorization header:", authHeader);
 
-  if (!authHeader) {
+ /* if (!authHeader) {
     return res.status(401).json({ error: "Unauthorized" });;
-  }
+  } */
 
   const idToken = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
 
@@ -34,19 +34,33 @@ console.log("Authorization header:", authHeader);
     req.user = decodedToken;
     next();
   } catch (error) {
-    return res.status(401).json({ error: "Unauthorized" });;
+    return res.status(401).send(error);
   }
 }
 
 app.post("/api/protected", verifyToken, async (req, res) => {
-  const { uid, name, email } = req.user;
-let user = await User.findOne({ uid });
+  try {
+    const { name, email, uid } = req.user;
+    
+    let user = await User.findOne({ email });
 
-if (!user) {
-  user = new User({ uid, name, email });
-  await user.save();
-}
-  res.send(user);
+    if (!user) {
+      // Create new user for Google sign-in
+      user = new User({ 
+        name, 
+        email, 
+        googleId: uid,
+        isGoogleUser: true
+        // Don't set password field for Google users
+      });
+      await user.save();
+    }
+    
+    res.json(user);
+  } catch (error) {
+    console.error("Error in protected route:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.listen(PORT, () => {

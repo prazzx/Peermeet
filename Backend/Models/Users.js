@@ -1,6 +1,6 @@
 const { required } = require("joi");
 const mongoose = require("mongoose");
-const schema = mongoose.schema;
+const schema = mongoose.Schema;
 
 const Userschema = new mongoose.Schema({
         name: {
@@ -10,14 +10,24 @@ const Userschema = new mongoose.Schema({
         email: {
             type: String,
             required: true,
-            unqiue: true,
+            unique: true,
         },
         password: {
             type: String,
-            required: true,
+            required: function() {
+                // Only require password if googleId is not present
+                return !this.googleId;
+            }
         },
+        googleId: {
+            type: String,
+            required: false
+        },
+        isGoogleUser: {
+            type: Boolean,
+            default: false
+        }
 })
 
 const Usermodel = mongoose.model('Users', Userschema);
-module.exports = Usermodel ;
-
+module.exports = Usermodel;
