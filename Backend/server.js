@@ -20,11 +20,10 @@ app.use('/auth', Router);
 
 async function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
-console.log("Authorization header:", authHeader);
 
- /* if (!authHeader) {
+ if (!authHeader) {
     return res.status(401).json({ error: "Unauthorized" });;
-  } */
+  } 
 
   const idToken = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
 

@@ -4,10 +4,42 @@ import pic from '../Assets/herosection.png'
 import React, { useState } from 'react';
 import 'react-toastify/ReactToastify.css'
 import { handleError, handleSuccess } from './utils';
+import { auth, googleProvider } from "./firebase";
+import { signInWithPopup } from "firebase/auth";
 
 
 const Login = () => {
 
+    const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const token = await result.user.getIdToken();
+  
+      const response = await fetch("http://localhost:5000/api/protected", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if(response.ok){
+        console.log("Google login successful");
+        handleSuccess("Logged in with Google Account successfully");
+      }
+    
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Server error:", errorText);
+        handleError(`Server error: ${response.status}`);
+        return;
+      }
+  
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+      handleError("Google sign-in failed. Please try again.");
+    }
+  };
 
 
 const [loginInfo, setloginInfo] = useState({
@@ -84,6 +116,9 @@ const [loginInfo, setloginInfo] = useState({
              value={loginInfo.password}/>
         </div>
         <button>Login</button>
+        <br/>
+        <h1>OR</h1>
+        <button type="button" onClick={handleGoogleSignIn}>Login with Google</button>
         <br />
         <span>
           Don't have an account?

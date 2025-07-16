@@ -15,10 +15,7 @@ const Signup = () => {
   const handleGoogleSignIn = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    console.log(result);
     const token = await result.user.getIdToken();
-
-    console.log("Sending token:", token);
 
     const response = await fetch("http://localhost:5000/api/protected", {
       method: "POST",
@@ -28,7 +25,11 @@ const Signup = () => {
       },
     });
 
-    // Check if response is ok and content-type is JSON
+    if(response.ok){
+      console.log("Google login successful");
+      handleSuccess("Logged in with Google Account successfully");
+    }
+  
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Server error:", errorText);
@@ -36,17 +37,6 @@ const Signup = () => {
       return;
     }
 
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      const errorText = await response.text();
-      console.error("Server returned non-JSON response:", errorText);
-      handleError("Server configuration error");
-      return;
-    }
-
-    const userData = await response.json();
-    console.log("User Data:", userData);
-    
   } catch (error) {
     console.error("Error during sign-in:", error);
     handleError("Google sign-in failed. Please try again.");
