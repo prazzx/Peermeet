@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const admin = require("./firebase");
+const User = require('./Models/Users');
 require('dotenv').config();
 require('./Models/db');
 const Router = require('./Routes/AuthRouter');
@@ -18,31 +19,33 @@ app.use(cors());
 app.use('/auth', Router);
 
 async function verifyToken(req, res, next) {
-  const idToken = req.headers.authorization;
+  const authHeader = req.headers.authorization;
+console.log("Authorization header:", authHeader);
 
-  if (!idToken) {
-    return res.status(401).send("Unauthorized");
+  if (!authHeader) {
+    return res.status(401).json({ error: "Unauthorized" });;
   }
+
+  const idToken = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
+
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     req.user = decodedToken;
     next();
   } catch (error) {
-    return res.status(401).send("Unauthorized");
+    return res.status(401).json({ error: "Unauthorized" });;
   }
 }
 
 app.post("/api/protected", verifyToken, async (req, res) => {
-  const { name, email} = req.user;
+  const { uid, name, email } = req.user;
+let user = await User.findOne({ uid });
 
-  let user = await User.findOne({ uid });
-
-  if (!user) {
-    user = new User({  name, email});
-    await user.save();
-  }
-
+if (!user) {
+  user = new User({ uid, name, email });
+  await user.save();
+}
   res.send(user);
 });
 

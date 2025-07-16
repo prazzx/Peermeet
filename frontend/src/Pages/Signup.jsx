@@ -3,10 +3,39 @@ import { ToastContainer } from 'react-toastify'
 import React, { useState } from 'react';
 import 'react-toastify/ReactToastify.css'
 import { handleError, handleSuccess } from './utils';
+import { auth, googleProvider } from "./firebase";
+import { signInWithPopup } from "firebase/auth";
+
 
 
 
 const Signup = () => {
+
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log(result);
+      const token = await result.user.getIdToken();
+
+      console.log("Sending token:", token);
+
+
+      const response = await fetch("http://localhost:5000/api/protected", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const userData = await response.json();
+      console.log("User Data:", userData);
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+    }
+  };
+
   const [signupInfo, setsignupInfo] = useState({
     name: '',
     email: '',
@@ -93,6 +122,9 @@ const Signup = () => {
         </div>
         <button>Signup</button>
         <br />
+        <h1>OR</h1>
+        <button type="button" onClick={handleGoogleSignIn}>Login with Google</button>
+        <br/>
         <span>
           Already have an account?
           <Link to="/login">Login</Link>
