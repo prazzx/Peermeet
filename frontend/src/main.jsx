@@ -11,6 +11,7 @@ import Reset from './Pages/Pwreset'
 import Dashbord from './Pages/Dashbord'
 import Layout from './Layout'
 import Updateprofile from './Pages/Updateprofile'
+import Yourprofile from './Pages/Yourprofile'
 
 
 const routing101 = createBrowserRouter([
@@ -28,7 +29,8 @@ const routing101 = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "dashboard", element: <Dashbord /> },
-      {path : "Updateprofile", element: <Updateprofile/>}
+      {path : "Updateprofile", element: <Updateprofile/>},
+      {path : "Yourprofile", element: <Yourprofile/>}
     ]
 
   }

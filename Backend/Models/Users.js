@@ -1,7 +1,4 @@
-const { required } = require("joi");
 const mongoose = require("mongoose");
-const schema = mongoose.Schema;
-
 const Userschema = new mongoose.Schema({
     fullName: {
     type: String,

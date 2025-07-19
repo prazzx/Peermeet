@@ -24,11 +24,18 @@ export default function Navbar() {
                 {/* Right: Nav links */}
                 <ul className='flex space-x-6 items-center'>
                     <NavLink
+                        to='/Yourprofile'
+                        className="text-white bg-indigo-600 hover:bg-white px-3.5 py-1.5 font-mono  cursor-pointer  hover:text-black  border-2 border-solid border-blue-900 rounded-sm "
+                    >
+                     Your Profile
+                    </NavLink>
+                    <NavLink
                         to='/Updateprofile'
                         className="text-white bg-indigo-600 hover:bg-white px-3.5 py-1.5 font-mono  cursor-pointer  hover:text-black  border-2 border-solid border-blue-900 rounded-sm "
                     >
-                        Update Profile
+                     Update Profile
                     </NavLink>
+                     
 
                     <button
                         onClick={() => {

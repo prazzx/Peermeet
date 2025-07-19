@@ -54,11 +54,35 @@ export default function UpdateProfile() {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Submitted Profile:', formData);
-    // TODO: send data to server via API
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const data = new FormData();
+  data.append('fullName', formData.fullName);
+  data.append('email', formData.email);
+  data.append('location', formData.location);
+  data.append('bio', formData.bio);
+  data.append('role', formData.role);
+  data.append('profilePhoto', formData.profilePhoto);
+data.append('interests', JSON.stringify(formData.interests));
+
+
+  try {
+    const res = await fetch('http://localhost:5000/api/profile/update', {
+      method: 'POST',
+      body: data,
+    });
+
+    const result = await res.json();
+    if (res.ok) {
+      alert('Profile updated successfully!');
+    } else {
+      alert(result.error || 'Something went wrong.');
+    }
+  } catch (err) {
+    console.error('Error submitting form:', err);
+  }
+};
 
   return (
     <div className="max-w-2xl mx-auto p-6 shadow rounded-lg bg-white mt-10">
