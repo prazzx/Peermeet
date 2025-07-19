@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { auth } from './firebase';
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Fetch user profile on mount
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get('http://localhost:5000/api/profile/get?email=karn.aman007@gmail.com'); // replace with dynamic email or auth
-        setProfile(res.data);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching profile:', err);
-        setLoading(false);
-      }
-    };
+ useEffect(() => {
+  const user = auth.currentUser;
+  if (user) {
+    const email = user.email;
+    axios.get(`http://localhost:5000/api/profile/get?email=${email}`)
+      .then(res => setProfile(res.data))
+      .catch(err => console.error('Error fetching profile:', err))
+      .finally(() => setLoading(false));
+  } else {
+    console.error("User not authenticated");
+    setLoading(false);
+  }
+}, []);
 
-    fetchProfile();
-  }, []);
 
   if (loading) return <div className="text-center mt-10">Loading...</div>;
   if (!profile) return <div className="text-center mt-10">No profile found.</div>;

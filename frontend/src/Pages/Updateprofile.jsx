@@ -1,4 +1,9 @@
+import { useNavigate } from 'react-router';
 import React, { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
+import { handleError, handleSuccess } from './utils';
+
 
 const interestsList = [
   // Creative & Arts
@@ -24,6 +29,7 @@ const interestsList = [
 ];
 
 export default function UpdateProfile() {
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -75,9 +81,12 @@ data.append('interests', JSON.stringify(formData.interests));
 
     const result = await res.json();
     if (res.ok) {
-      alert('Profile updated successfully!');
+      handleSuccess("Data updated successfully");
+       setTimeout(() => {
+        navigate('/Yourprofile'); 
+      }, 1000);
     } else {
-      alert(result.error || 'Something went wrong.');
+      handleError("Something went wrong.");
     }
   } catch (err) {
     console.error('Error submitting form:', err);
@@ -183,6 +192,7 @@ data.append('interests', JSON.stringify(formData.interests));
           </button>
         </div>
       </form>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
