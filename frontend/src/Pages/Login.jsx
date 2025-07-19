@@ -38,7 +38,7 @@ const Login = () => {
       // ✅ Navigate to home/dashboard after login
       setTimeout(() => {
         navigate('/dashboard'); // Change route as per your app
-      }, 2000);
+      }, 1000);
 
     } catch (error) {
       console.error('Login error:', error);

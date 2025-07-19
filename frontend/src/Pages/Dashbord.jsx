@@ -1,9 +1,9 @@
-import React from 'react'
+
 
 const Dashbord = () => {
   return (
     <div>
-      
+ <p>This is dashboard</p>
     </div>
   )
 }
