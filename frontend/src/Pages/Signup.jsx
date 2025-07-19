@@ -34,9 +34,6 @@ const Signup = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // ✅ Optionally update display name
-      await user.updateProfile({ displayName: name });
-
       handleSuccess('Signup successful');
       setTimeout(() => {
         navigate('/login');
