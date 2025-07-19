@@ -58,5 +58,24 @@ const profile = await UserProfile.findOneAndUpdate(
     res.status(500).json({ success: false, message: 'Server Error' });
   }
 });
+// GET /api/profile/get?email=...
+router.get('/get', async (req, res) => {
+  const { email } = req.query;
+
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
+
+  try {
+    const profile = await UserProfile.findOne({ email });
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+    res.json(profile);
+  } catch (err) {
+    console.error('Error fetching profile:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 module.exports = router;

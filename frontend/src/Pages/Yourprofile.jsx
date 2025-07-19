@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-//import axios from 'axios';
+import axios from 'axios';
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
@@ -9,7 +9,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/profile/get?karn.aman007@gmail.com'); // replace with dynamic email or auth
+        const res = await axios.get('http://localhost:5000/api/profile/get?email=karn.aman007@gmail.com'); // replace with dynamic email or auth
         setProfile(res.data);
         setLoading(false);
       } catch (err) {
@@ -27,10 +27,10 @@ export default function Profile() {
   return (
     <div className="max-w-2xl mx-auto p-6 mt-10 bg-white rounded shadow">
       <h2 className="text-2xl font-bold mb-4">Your Profile</h2>
-
+      
       {profile.profilePhoto && (
         <img
-          src={`http://localhost:5000/uploads/${profile.profilePhoto}`}
+          src={`http://localhost:5000/${profile.profilePhoto}`}
           alt="Profile"
           className="w-32 h-32 rounded-full object-cover mb-4"
         />
