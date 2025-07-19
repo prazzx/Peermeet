@@ -1,94 +1,65 @@
-import herosection from '../Assets/herosection.png'
-import { Link } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
+import herosection from '../Assets/herosection.png';
+import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import React, { useState } from 'react';
-import 'react-toastify/ReactToastify.css'
+import 'react-toastify/ReactToastify.css';
 import { handleError, handleSuccess } from './utils';
 import { auth, googleProvider } from "./firebase";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const token = await result.user.getIdToken();
-
-      const response = await fetch("http://localhost:5000/api/protected", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if(response.ok){
-        console.log("Google login successful");
-        handleSuccess("Logged in with Google Account successfully");
-      }
-    
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Server error:", errorText);
-        handleError(`Server error: ${response.status}`);
-        return;
-      }
-
-    } catch (error) {
-      console.error("Error during sign-in:", error);
-      handleError("Google sign-in failed. Please try again.");
-    }
-  };
+  const navigate = useNavigate();
 
   const [loginInfo, setloginInfo] = useState({
     email: '',
     password: ''
-  })
+  });
 
-  //const navigate = useNavigate(); To be used when Home page is ready
   const handlechange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
-    const copyloginInfo = { ...loginInfo };
-    copyloginInfo[name] = value;
-    setloginInfo(copyloginInfo);
-  }
+    setloginInfo(prev => ({ ...prev, [name]: value }));
+  };
 
   const handlelogin = async (e) => {
     e.preventDefault();
-    const {email,password} = loginInfo;
-    if( !email || !password){
+    const { email, password } = loginInfo;
+
+    if (!email || !password) {
       return handleError('All fields must be filled');
     }
-    try{
-      const url = "http://localhost:5000/auth/login"
-      const response = await fetch(url,
-        {
-          method:"POST",
-          headers:{
-            'Content-type':'application/json'
-          },
-          body: JSON.stringify(loginInfo) 
-        }
-      )
-      const result = await response.json();
-      const {success, message, error} = result;
-      if(success){
-        handleSuccess(message);
-        /*setTimeout(()=>{
-          navigate('/home page when created');
-        }, 2000)*/
-      }else if(error){
-        const details = error?.details[0].message;
-        handleError(details);
-      }else if(!success){
-        handleError(message);
-      }
 
+    try {
+      // ✅ Login with Firebase Email/Password
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      handleSuccess('Login successful');
+
+      // ✅ Navigate to home/dashboard after login
+      setTimeout(() => {
+        navigate('/dashboard'); // Change route as per your app
+      }, 2000);
+
+    } catch (error) {
+      console.error('Login error:', error);
+      handleError(error.message);
     }
-    catch(err){
-      handleError(err);
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log("Google login successful");
+      handleSuccess("Logged in with Google Account successfully");
+
+      // ✅ Navigate after successful Google login
+      navigate('/dashboard'); // Change route as per your app
+
+    } catch (error) {
+      console.error("Error during Google sign-in:", error);
+      handleError("Google sign-in failed. Please try again.");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">

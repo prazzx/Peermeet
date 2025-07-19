@@ -1,95 +1,65 @@
-import { Link, useNavigate } from "react-router-dom"
-import { ToastContainer } from 'react-toastify'
+import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 import React, { useState } from 'react';
-import 'react-toastify/ReactToastify.css'
+import 'react-toastify/ReactToastify.css';
 import { handleError, handleSuccess } from './utils';
 import { auth, googleProvider } from "./firebase";
-import { signInWithPopup } from "firebase/auth";
-import herosection2 from '../Assets/herosection2.png'
+import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
+import herosection2 from '../Assets/herosection2.png';
 
 const Signup = () => {
-  const handleGoogleSignIn = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const token = await result.user.getIdToken();
-
-      const response = await fetch("http://localhost:5000/api/protected", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if(response.ok){
-        console.log("Google login successful");
-        handleSuccess("Logged in with Google Account successfully");
-      }
-    
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Server error:", errorText);
-        handleError(`Server error: ${response.status}`);
-        return;
-      }
-
-    } catch (error) {
-      console.error("Error during sign-in:", error);
-      handleError("Google sign-in failed. Please try again.");
-    }
-  };
+  const navigate = useNavigate();
 
   const [signupInfo, setsignupInfo] = useState({
     name: '',
     email: '',
     password: ''
-  })
+  });
 
-  const navigate = useNavigate();
   const handlechange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
-    const copysignupInfo = { ...signupInfo }; //Creating an object so that it can passed to backend as json
-    copysignupInfo[name] = value;
-    setsignupInfo(copysignupInfo);
-  }
+    setsignupInfo(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const {name, email,password} = signupInfo;
-    if(!name || !email || !password){
+    const { name, email, password } = signupInfo;
+
+    if (!name || !email || !password) {
       return handleError('All fields must be filled');
     }
-    try{
-      const url = "http://localhost:5000/auth/signup"
-      const response = await fetch(url,
-        {
-          method:"POST",
-          headers:{
-            'Content-type':'application/json'
-          },
-          body: JSON.stringify(signupInfo) //Sending string contents of json object created from input fields
-        }
-      )
-      const result = await response.json();
-      const {success, message, error} = result;
-      if(success){
-        handleSuccess(message);
-        setTimeout(()=>{
-          navigate('/login');
-        }, 2000)
-      }else if(error){
-        const details = error?.details[0].message;
-        handleError(details);
-      }else if(!success){
-        handleError(message);
-      }
 
+    try {
+      // ✅ Signup with Firebase Email/Password
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // ✅ Optionally update display name
+      await user.updateProfile({ displayName: name });
+
+      handleSuccess('Signup successful');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (error) {
+      console.error('Signup error:', error);
+      handleError(error.message);
     }
-    catch(err){
-      handleError(err);
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log("Google login successful");
+      handleSuccess("Logged in with Google Account successfully");
+
+      // ✅ Navigate after successful Google login
+      navigate('/dashboard'); // Change route as per your app
+    } catch (error) {
+      console.error("Error during Google sign-in:", error);
+      handleError("Google sign-in failed. Please try again.");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
