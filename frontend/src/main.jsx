@@ -9,6 +9,7 @@ import { createBrowserRouter , RouterProvider } from 'react-router'
 import Signup from './Pages/Signup'
 import Reset from './Pages/Pwreset'
 import Dashbord from './Pages/Dashbord'
+import Layout from './Layout'
 
 
 const routing101 = createBrowserRouter([
@@ -17,9 +18,17 @@ const routing101 = createBrowserRouter([
     , element: <Root/>,
     children: [
 { path:"", element:<Body/>} , { path:"About",element:<About/>}, { path:"login",element:<Login/>} , { path:"signup",element:<Signup/>} , { path:"forgotpassword",element:<Reset/>},
-{ path:"dashboard",element:<Dashbord/>}
+
 
     ]  },
+    {
+      path:'/',
+      element: <Layout/>,
+      children:  [
+        { path:"dashboard",element:<Dashbord/>}
+      ]
+
+    }
 ])
 
 createRoot(document.getElementById('root')).render(
