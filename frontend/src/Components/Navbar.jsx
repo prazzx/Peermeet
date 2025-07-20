@@ -14,7 +14,7 @@ export default function Navbar(){
   
  <a href='/' className="text-black px-4 py-1.5 font-mono font-extrabold cursor-pointer hover:text-teal-800" onClick={(e) => {
   e.preventDefault();
-  window.location.href = '/#features';
+  window.location.href = '/#features';``
 }}>
   Features
 </a>
