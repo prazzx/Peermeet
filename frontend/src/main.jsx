@@ -12,6 +12,7 @@ import Dashbord from './Pages/Dashbord'
 import Layout from './Layout'
 import Updateprofile from './Pages/Updateprofile'
 import Yourprofile from './Pages/Yourprofile'
+import ProtectedRoute from './Components/ProtectedRoute'
 
 
 const routing101 = createBrowserRouter([
@@ -28,9 +29,9 @@ const routing101 = createBrowserRouter([
     path: '/',
     element: <Layout />,
     children: [
-      { path: "dashboard", element: <Dashbord /> },
-      {path : "Updateprofile", element: <Updateprofile/>},
-      {path : "Yourprofile", element: <Yourprofile/>}
+      { path: "dashboard", element:<ProtectedRoute> <Dashbord /></ProtectedRoute>  },
+      {path : "Updateprofile", element:<ProtectedRoute> <Updateprofile/></ProtectedRoute> },
+      {path : "Yourprofile", element: <ProtectedRoute><Yourprofile/></ProtectedRoute> }
     ]
 
   }

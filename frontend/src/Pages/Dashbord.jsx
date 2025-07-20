@@ -1,11 +1,12 @@
 
-
-const Dashbord = () => {
+const Dashboard = ({ user }) => {
   return (
     <div>
- <p>This is dashboard</p>
+      {/* <h1>Welcome, {user.displayName}</h1>
+      <p>Your email: {user.email}</p>
+      <p>Your UID: {user.uid}</p> */}
     </div>
   )
 }
 
-export default Dashbord
+export default Dashboard;

@@ -1,7 +1,7 @@
 import herosection from '../Assets/herosection.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import 'react-toastify/ReactToastify.css';
 import { handleError, handleSuccess } from './utils';
 import { auth, googleProvider } from "./firebase";
@@ -29,16 +29,14 @@ const Login = () => {
     }
 
     try {
-      // ✅ Login with Firebase Email/Password
+      //  Login with Firebase Email/Password
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       handleSuccess('Login successful');
 
-      // ✅ Navigate to home/dashboard after login
-      setTimeout(() => {
-        navigate('/dashboard'); // Change route as per your app
-      }, 1000);
+        navigate('/dashboard'); 
+      
 
     } catch (error) {
       console.error('Login error:', error);
@@ -53,13 +51,18 @@ const Login = () => {
       handleSuccess("Logged in with Google Account successfully");
 
       // ✅ Navigate after successful Google login
-      navigate('/dashboard'); // Change route as per your app
+      navigate('/dashboard'); 
 
     } catch (error) {
       console.error("Error during Google sign-in:", error);
       handleError("Google sign-in failed. Please try again.");
     }
   };
+  auth.onAuthStateChanged(user => {
+  if(user){
+    console.log(user.uid); // unique id for each user
+  }
+});
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
