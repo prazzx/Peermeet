@@ -1,8 +1,25 @@
 import logo from '../Assets/logo.png';
-import { Link, NavLink, useNavigate  } from 'react-router-dom';
+import {auth} from '../Pages/firebase.js';
+import { signOut } from 'firebase/auth';
+import {  useNavigate , NavLink } from 'react-router-dom';
 
 export default function Navbar() {
     const navigate = useNavigate();
+const handlelogout = ()=>{
+const confirm = window.confirm('Are you sure you want to logout?' );
+if(confirm){
+    signOut(auth)
+    .then (() => {
+        navigate('/');
+        alert('logged out');
+    })
+     .catch((error) => {
+          console.error('Error signing out:', error);
+          alert('Failed to log out');
+        });
+    }
+  };
+
     return (
         <nav className='text-bg border-b-2'>
             <div className='relative max-w-6xl h-16 mx-auto flex items-center justify-between px-4'>
@@ -38,13 +55,8 @@ export default function Navbar() {
                      
 
                     <button
-                        onClick={() => {
-                            const confirmed = window.confirm('Are you sure you want to logout?');
-                            if (confirmed) {
-                                navigate('/');
-                                alert('Logged out');
-                            }
-                        }}
+                        onClick={handlelogout}
+                        
                         className='text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 font-mono'
                     >
                         Logout
@@ -53,4 +65,4 @@ export default function Navbar() {
             </div>
         </nav>
     );
-}
+};
