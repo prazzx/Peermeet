@@ -1,11 +1,15 @@
 from sentence_transformers import SentenceTransformer, util
 from flask import Flask, request, jsonify
-from pymongo import MongoClient
 
 app = Flask(__name__)
-model = SentenceTransformer('all-MiniLM-L6-v2')  # Lightweight and fast
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
-client = MongoClient("mongodb+srv://karnaman:1234@cluster0ne.miuselj.mongodb.net/PeerMeet?retryWrites=true&w=majority&appName=Cluster0ne")
-db = client['PeerMeet']
-collection = db['users']
+@app.route('/embed', methods=['POST'])
+def embed():
+    data = request.json
+    sentences = data.get("interests", [])
+    embeddings = model.encode([" ".join(sentences)], convert_to_tensor=True)
+    return jsonify(embeddings.tolist())
 
+if __name__ == '__main__':
+    app.run(port=6000)

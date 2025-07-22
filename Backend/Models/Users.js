@@ -35,7 +35,11 @@ const Userschema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  interestEmbedding: {
+  type: [Number],
+  default: [],
+}
 })
 
 const Usermodel = mongoose.model('Users', Userschema);
