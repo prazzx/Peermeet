@@ -29,6 +29,7 @@ export default function Navbar() {
     return;
   }
   navigate(`/searchResults?query=${encodeURIComponent(searchTerm)}`);
+  setSearchTerm('');
 };
 
 

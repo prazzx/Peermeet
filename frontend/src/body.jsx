@@ -1,6 +1,12 @@
 import  hero from './Assets/herosection.png'
 import hero2 from './Assets/herosection2.png'
+import { useNavigate } from 'react-router'
 export default function Body(){
+    const navigate=useNavigate();
+
+    const handlebutton = () =>{
+        navigate('/signup')
+    }
     return(
         < >
         <section className="relative  "> 
@@ -15,7 +21,7 @@ export default function Body(){
 <p className='text-black text-[1.2rem] leading-7 opacity-75'> Start your journey towards growth today. </p>
 
 
-  <button className="text-black  bg-white hover:bg-indigo-950 px-3.5 py-1.5  transition-all duration-100 font-mono  cursor-pointer  hover:text-red-400 border-2 border-solid border-blue-900 rounded-sm ">Get Started Now</button>
+  <button onClick={handlebutton} className="text-black  bg-white hover:bg-indigo-950 px-3.5 py-1.5  transition-all duration-100 font-mono  cursor-pointer  hover:text-red-400 border-2 border-solid border-blue-900 rounded-sm ">Get Started Now</button>
 
                     </div>
 {/* pic wala div */}
