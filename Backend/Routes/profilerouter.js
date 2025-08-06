@@ -51,7 +51,7 @@ router.get('/get', async (req, res) => {
 // POST /api/profile/update
 router.post('/update', upload.single('profilePhoto'), async (req, res) => {
   try {
-    const { fullName, email, location, bio, role, interests } = req.body;
+    const { fullName, email, location, bio, role, interests,phoneNumber} = req.body;
     const profilePhoto = req.file ? req.file.path : '';
 
     let parsedInterests = [];
@@ -87,6 +87,7 @@ router.post('/update', upload.single('profilePhoto'), async (req, res) => {
         interests: parsedInterests,
         interestEmbedding, // ✅ Store embedding
         profilePhoto,
+        phoneNumber,
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
@@ -123,6 +124,7 @@ router.post('/similar', async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         profilePhoto: user.profilePhoto,
+          phoneNumber: user.phoneNumber || '',
         interests: user.interests,
         similarity: cosineSimilarity(currentUser.interestEmbedding, user.interestEmbedding),
       };

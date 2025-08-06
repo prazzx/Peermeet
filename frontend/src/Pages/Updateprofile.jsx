@@ -69,7 +69,7 @@ export default function UpdateProfile() {
           bio: data.bio || '',
           role: data.role || '',
           interests: data.interests || [],
-          profilePhoto: null
+          profilePhoto: null, phoneNumber: data.phoneNumber || '',
         });
       } else {
         handleError("Failed to load profile data.");
@@ -89,6 +89,7 @@ export default function UpdateProfile() {
     location: '',
     bio: '',
     role: '',
+    phoneNumber: '',
     interests: [],
     profilePhoto: null,
   });
@@ -123,6 +124,8 @@ export default function UpdateProfile() {
   data.append('bio', formData.bio);
   data.append('role', formData.role);
   data.append('profilePhoto', formData.profilePhoto);
+  data.append('phoneNumber', formData.phoneNumber);
+
 data.append('interests', JSON.stringify(formData.interests));
 
 
@@ -179,6 +182,16 @@ data.append('interests', JSON.stringify(formData.interests));
             type="text"
             name="location"
             value={formData.location}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          />
+        </div>
+ <div>
+          <label className="block font-semibold">Phone number</label>
+          <input
+            type="text"
+            name="phoneNumber"
+            value={formData.phoneNumber}
             onChange={handleChange}
             className="w-full border p-2 rounded"
           />

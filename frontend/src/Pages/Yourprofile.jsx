@@ -53,6 +53,7 @@ export default function Profile() {
         <p><strong>Location:</strong> {profile.location || 'Not provided'}</p>
         <p><strong>Role:</strong> {profile.role || 'Not provided'}</p>
         <p><strong>Bio:</strong> {profile.bio || 'Not provided'}</p>
+        <p><strong>Phone Number:</strong> {profile.phoneNumber|| 'Not provided'}</p>
 
         <div>
           <strong>Interests:</strong>
