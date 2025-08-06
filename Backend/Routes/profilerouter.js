@@ -145,4 +145,29 @@ router.post('/similar', async (req, res) => {
   }
 });
 
+router.get('/search', async (req, res) => {
+  const query = req.query.query?.toLowerCase();
+
+  if (!query) return res.status(400).json({ success: false, message: 'Query is required' });
+
+  try {
+    const regex = new RegExp(query, 'i'); // case-insensitive search
+
+    const users = await UserProfile.find({
+      $or: [
+        { fullName: regex },
+        { interests: { $in: [regex] } },
+        { location: regex },
+        { bio: regex },
+        { role: regex }
+      ]
+    }).limit(10);
+
+    res.json({ success: true, data: users });
+  } catch (err) {
+    console.error('Search error:', err);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;

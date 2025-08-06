@@ -12,6 +12,7 @@ import Dashbord from './Pages/Dashbord'
 import Layout from './Layout'
 import Updateprofile from './Pages/Updateprofile'
 import Yourprofile from './Pages/Yourprofile'
+import SearchResults from './Pages/searchResults'
 import ProtectedRoute from './Components/ProtectedRoute'
 
 
@@ -31,7 +32,8 @@ const routing101 = createBrowserRouter([
     children: [
       { path: "dashboard", element:<ProtectedRoute> <Dashbord /></ProtectedRoute>  },
       {path : "Updateprofile", element:<ProtectedRoute> <Updateprofile/></ProtectedRoute> },
-      {path : "Yourprofile", element: <ProtectedRoute><Yourprofile/></ProtectedRoute> }
+      {path : "Yourprofile", element: <ProtectedRoute><Yourprofile/></ProtectedRoute> },
+      {path : "searchResults", element: <ProtectedRoute><SearchResults/></ProtectedRoute> }
     ]
 
   }
