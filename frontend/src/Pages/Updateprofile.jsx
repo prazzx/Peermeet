@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 import { handleError, handleSuccess } from './utils';
+import { getAuth } from 'firebase/auth';
+
 
 
 const interestsList = [
@@ -40,13 +42,26 @@ const interestsList = [
   'Memes', 'Podcast Listening', 'Event Hosting', 'Networking', 'Making Reels', 'Vlogging'
 ];
 
-useEffect(() => {
+
+export default function UpdateProfile() {
+  useEffect(() => {
   const fetchProfile = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/profile/me'); // Adjust the endpoint if different
-      const data = await res.json();
+      const auth = getAuth();
+      const user = auth.currentUser;
 
-      if (res.ok) {
+      if (!user) {
+        console.error("No logged-in user found");
+        return;
+      }
+
+      const email = user.email;
+
+      const res = await fetch(`http://localhost:5000/api/profile/get?email=${email}`);
+      const result = await res.json();
+
+      if (res.ok && result.success) {
+        const data = result.data;
         setFormData({
           fullName: data.fullName || '',
           email: data.email || '',
@@ -54,22 +69,19 @@ useEffect(() => {
           bio: data.bio || '',
           role: data.role || '',
           interests: data.interests || [],
-          profilePhoto: null  // File input can't be prefilled
+          profilePhoto: null
         });
       } else {
         handleError("Failed to load profile data.");
       }
     } catch (err) {
-      console.error("Failed to fetch profile:", err);
-      handleError("Something went wrong while fetching data.");
+      console.error("Error fetching profile:", err);
     }
   };
 
   fetchProfile();
 }, []);
 
-
-export default function UpdateProfile() {
     const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
