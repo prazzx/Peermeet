@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 import { handleError, handleSuccess } from './utils';
@@ -7,26 +7,67 @@ import { handleError, handleSuccess } from './utils';
 
 const interestsList = [
   // Creative & Arts
-  'Painting', 'Photography', 'Graphic Design', 'Writing',
+  'Painting', 'Photography', 'Graphic Design', 'Writing', 'Sketching', 'Calligraphy', 'Animation', 'Film Making',
 
   // Music & Performance
-  'Singing', 'Guitar', 'Dancing', 'Music Production',
+  'Singing', 'Guitar', 'Dancing', 'Music Production', 'Piano', 'Beatboxing', 'Theatre', 'Public Speaking',
 
   // Learning & Knowledge
-  'Reading', 'Philosophy', 'History', 'Science',
+  'Reading', 'Philosophy', 'History', 'Science', 'Psychology', 'Economics', 'Mathematics', 'Language Learning', 'Astronomy',
 
   // Tech & Digital
-  'Programming', 'Web Development', 'AI/ML', 'Cybersecurity',
+  'Programming', 'Web Development', 'AI/ML', 'Cybersecurity', 'Blockchain', 'UI/UX Design', 'Cloud Computing', 'Game Development', 'Data Science', 'Tech Blogging',
 
   // Lifestyle & Wellness
-  'Yoga', 'Fitness', 'Mental Health', 'Hiking',
+  'Yoga', 'Fitness', 'Mental Health', 'Hiking', 'Mindfulness', 'Nutrition', 'Meditation', 'Journaling', 'Productivity',
 
   // Entertainment & Hobbies
-  'Gaming', 'Movies', 'Anime', 'Traveling',
+  'Gaming', 'Movies', 'Anime', 'Traveling', 'Cooking', 'Board Games', 'Collecting', 'Stand-up Comedy',
 
   // Social & Causes
-  'Volunteering', 'Sustainability', 'Human Rights', 'Animal Welfare'
+  'Volunteering', 'Sustainability', 'Human Rights', 'Animal Welfare', 'Climate Activism', 'Community Service', 'Women Empowerment',
+
+  // Career & Professional Skills
+  'Resume Building', 'Interview Prep', 'Entrepreneurship', 'Leadership', 'Public Relations', 'Project Management', 'Marketing', 'Finance',
+
+  // Sports & Physical Activities
+  'Football', 'Basketball', 'Cricket', 'Swimming', 'Martial Arts', 'Cycling', 'Table Tennis', 'Running',
+
+  // Student Activities
+  'Hackathons', 'College Events', 'Debates', 'Model UN', 'Student Politics', 'Club Management',
+
+  // Fun & Social
+  'Memes', 'Podcast Listening', 'Event Hosting', 'Networking', 'Making Reels', 'Vlogging'
 ];
+
+useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/profile/me'); // Adjust the endpoint if different
+      const data = await res.json();
+
+      if (res.ok) {
+        setFormData({
+          fullName: data.fullName || '',
+          email: data.email || '',
+          location: data.location || '',
+          bio: data.bio || '',
+          role: data.role || '',
+          interests: data.interests || [],
+          profilePhoto: null  // File input can't be prefilled
+        });
+      } else {
+        handleError("Failed to load profile data.");
+      }
+    } catch (err) {
+      console.error("Failed to fetch profile:", err);
+      handleError("Something went wrong while fetching data.");
+    }
+  };
+
+  fetchProfile();
+}, []);
+
 
 export default function UpdateProfile() {
     const navigate = useNavigate();
