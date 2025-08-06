@@ -20,6 +20,10 @@ const Userschema = new mongoose.Schema({
     type: String,
     maxlength: 500
   },
+  phoneNumber:{
+    type: String,
+     maxlength: 500
+  },
   role: {
     type: String,
     trim: true

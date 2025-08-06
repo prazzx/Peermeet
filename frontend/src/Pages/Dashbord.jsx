@@ -58,6 +58,8 @@ const SimilarProfiles = () => {
               />
               <h3 className="text-lg font-semibold">{user.fullName}</h3>
               <p className="text-sm text-gray-500">{user.email}</p>
+              <p className="text-sm text-gray-500">📞 {user.phoneNumber || 'N/A'}</p>
+
               <p className="text-sm mt-2">
                 <strong>Similarity:</strong> {(user.similarity * 100).toFixed(2)}%
               </p>

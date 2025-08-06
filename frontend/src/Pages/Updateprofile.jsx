@@ -1,28 +1,95 @@
 import { useNavigate } from 'react-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/ReactToastify.css';
 import { handleError, handleSuccess } from './utils';
+import { getAuth } from 'firebase/auth';
+
 
 
 const interestsList = [
-  'Painting', 'Photography', 'Graphic Design', 'Writing',
-  'Singing', 'Guitar', 'Dancing', 'Music Production',
-  'Reading', 'Philosophy', 'History', 'Science',
-  'Programming', 'Web Development', 'AI/ML', 'Cybersecurity',
-  'Yoga', 'Fitness', 'Mental Health', 'Hiking',
-  'Gaming', 'Movies', 'Anime', 'Traveling',
-  'Volunteering', 'Sustainability', 'Human Rights', 'Animal Welfare'
+  // Creative & Arts
+  'Painting', 'Photography', 'Graphic Design', 'Writing', 'Sketching', 'Calligraphy', 'Animation', 'Film Making',
+
+  // Music & Performance
+  'Singing', 'Guitar', 'Dancing', 'Music Production', 'Piano', 'Beatboxing', 'Theatre', 'Public Speaking',
+
+  // Learning & Knowledge
+  'Reading', 'Philosophy', 'History', 'Science', 'Psychology', 'Economics', 'Mathematics', 'Language Learning', 'Astronomy',
+
+  // Tech & Digital
+  'Programming', 'Web Development', 'AI/ML', 'Cybersecurity', 'Blockchain', 'UI/UX Design', 'Cloud Computing', 'Game Development', 'Data Science', 'Tech Blogging',
+
+  // Lifestyle & Wellness
+  'Yoga', 'Fitness', 'Mental Health', 'Hiking', 'Mindfulness', 'Nutrition', 'Meditation', 'Journaling', 'Productivity',
+
+  // Entertainment & Hobbies
+  'Gaming', 'Movies', 'Anime', 'Traveling', 'Cooking', 'Board Games', 'Collecting', 'Stand-up Comedy',
+
+  // Social & Causes
+  'Volunteering', 'Sustainability', 'Human Rights', 'Animal Welfare', 'Climate Activism', 'Community Service', 'Women Empowerment',
+
+  // Career & Professional Skills
+  'Resume Building', 'Interview Prep', 'Entrepreneurship', 'Leadership', 'Public Relations', 'Project Management', 'Marketing', 'Finance',
+
+  // Sports & Physical Activities
+  'Football', 'Basketball', 'Cricket', 'Swimming', 'Martial Arts', 'Cycling', 'Table Tennis', 'Running',
+
+  // Student Activities
+  'Hackathons', 'College Events', 'Debates', 'Model UN', 'Student Politics', 'Club Management',
+
+  // Fun & Social
+  'Memes', 'Podcast Listening', 'Event Hosting', 'Networking', 'Making Reels', 'Vlogging'
 ];
 
+
 export default function UpdateProfile() {
-  const navigate = useNavigate();
+  useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error("No logged-in user found");
+        return;
+      }
+
+      const email = user.email;
+
+      const res = await fetch(`http://localhost:5000/api/profile/get?email=${email}`);
+      const result = await res.json();
+
+      if (res.ok && result.success) {
+        const data = result.data;
+        setFormData({
+          fullName: data.fullName || '',
+          email: data.email || '',
+          location: data.location || '',
+          bio: data.bio || '',
+          role: data.role || '',
+          interests: data.interests || [],
+          profilePhoto: null, phoneNumber: data.phoneNumber || '',
+        });
+      } else {
+        handleError("Failed to load profile data.");
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+    }
+  };
+
+  fetchProfile();
+}, []);
+
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     location: '',
     bio: '',
     role: '',
+    phoneNumber: '',
     interests: [],
     profilePhoto: null,
     instagram: '',
@@ -52,16 +119,16 @@ export default function UpdateProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = new FormData();
-    data.append('fullName', formData.fullName);
-    data.append('email', formData.email);
-    data.append('location', formData.location);
-    data.append('bio', formData.bio);
-    data.append('role', formData.role);
-    data.append('profilePhoto', formData.profilePhoto);
-    data.append('instagram', formData.instagram);
-    data.append('facebook', formData.facebook);
-    data.append('interests', JSON.stringify(formData.interests));
+  const data = new FormData();
+  data.append('fullName', formData.fullName);
+  data.append('email', formData.email);
+  data.append('location', formData.location);
+  data.append('bio', formData.bio);
+  data.append('role', formData.role);
+  data.append('profilePhoto', formData.profilePhoto);
+  data.append('phoneNumber', formData.phoneNumber);
+
+data.append('interests', JSON.stringify(formData.interests));
 
 
     try {
@@ -117,6 +184,16 @@ export default function UpdateProfile() {
             type="text"
             name="location"
             value={formData.location}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          />
+        </div>
+ <div>
+          <label className="block font-semibold">Phone number</label>
+          <input
+            type="text"
+            name="phoneNumber"
+            value={formData.phoneNumber}
             onChange={handleChange}
             className="w-full border p-2 rounded"
           />
