@@ -6,30 +6,17 @@ import { handleError, handleSuccess } from './utils';
 
 
 const interestsList = [
-  // Creative & Arts
   'Painting', 'Photography', 'Graphic Design', 'Writing',
-
-  // Music & Performance
   'Singing', 'Guitar', 'Dancing', 'Music Production',
-
-  // Learning & Knowledge
   'Reading', 'Philosophy', 'History', 'Science',
-
-  // Tech & Digital
   'Programming', 'Web Development', 'AI/ML', 'Cybersecurity',
-
-  // Lifestyle & Wellness
   'Yoga', 'Fitness', 'Mental Health', 'Hiking',
-
-  // Entertainment & Hobbies
   'Gaming', 'Movies', 'Anime', 'Traveling',
-
-  // Social & Causes
   'Volunteering', 'Sustainability', 'Human Rights', 'Animal Welfare'
 ];
 
 export default function UpdateProfile() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -38,6 +25,8 @@ export default function UpdateProfile() {
     role: '',
     interests: [],
     profilePhoto: null,
+    instagram: '',
+    facebook: '',
   });
 
   const handleChange = (e) => {
@@ -60,38 +49,40 @@ export default function UpdateProfile() {
     });
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const data = new FormData();
-  data.append('fullName', formData.fullName);
-  data.append('email', formData.email);
-  data.append('location', formData.location);
-  data.append('bio', formData.bio);
-  data.append('role', formData.role);
-  data.append('profilePhoto', formData.profilePhoto);
-data.append('interests', JSON.stringify(formData.interests));
+    const data = new FormData();
+    data.append('fullName', formData.fullName);
+    data.append('email', formData.email);
+    data.append('location', formData.location);
+    data.append('bio', formData.bio);
+    data.append('role', formData.role);
+    data.append('profilePhoto', formData.profilePhoto);
+    data.append('instagram', formData.instagram);
+    data.append('facebook', formData.facebook);
+    data.append('interests', JSON.stringify(formData.interests));
 
 
-  try {
-    const res = await fetch('http://localhost:5000/api/profile/update', {
-      method: 'POST',
-      body: data,
-    });
+    try {
+      const res = await fetch('http://localhost:5000/api/profile/update', {
+        method: 'POST',
+        body: data,
+      });
 
-    const result = await res.json();
-    if (res.ok) {
-      handleSuccess("Data updated successfully");
-       setTimeout(() => {
-        navigate('/Yourprofile'); 
-      }, 1000);
-    } else {
-      handleError("Something went wrong.");
+      const result = await res.json();
+      if (res.ok) {
+        handleSuccess("Data updated successfully");
+        setTimeout(() => {
+          navigate('/Yourprofile');
+        }, 1000);
+      } else {
+        handleError("Something went wrong.");
+      }
+    } catch (err) {
+      console.error('Error submitting form:', err);
     }
-  } catch (err) {
-    console.error('Error submitting form:', err);
-  }
-};
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-6 shadow rounded-lg bg-white mt-10">
@@ -163,17 +154,39 @@ data.append('interests', JSON.stringify(formData.interests));
         </div>
 
         <div>
+          <label className="block font-semibold">Instagram Link</label>
+          <input
+            type="url"
+            name="instagram"
+            value={formData.instagram}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          />
+        </div>
+
+        <div>
+          <label className="block font-semibold">Facebook Link</label>
+          <input
+            type="url"
+            name="facebook"
+            value={formData.facebook}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          />
+        </div>
+
+
+        <div>
           <label className="block font-semibold mb-1">Your Interests</label>
           <div className="flex flex-wrap gap-2">
             {interestsList.map((item) => (
               <button
                 type="button"
                 key={item}
-                className={`px-3 py-1 rounded-full border ${
-                  formData.interests.includes(item)
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100'
-                }`}
+                className={`px-3 py-1 rounded-full border ${formData.interests.includes(item)
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100'
+                  }`}
                 onClick={() => handleMultiSelect('interests', item)}
               >
                 {item}

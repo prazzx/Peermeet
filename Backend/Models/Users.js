@@ -32,6 +32,17 @@ const Userschema = new mongoose.Schema({
     type: String, // store the file URL or path
     default: ''
   },
+ /* instagram: {
+    type: String,
+    trim: true,
+    default: ''
+  },
+  facebook: {
+    type: String,
+    trim: true,
+    default: ''
+    
+  },*/
   createdAt: {
     type: Date,
     default: Date.now
