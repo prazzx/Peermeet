@@ -48,10 +48,12 @@ router.get('/get', async (req, res) => {
     });
   }
 });
+
+
 // POST /api/profile/update
 router.post('/update', upload.single('profilePhoto'), async (req, res) => {
   try {
-    const { fullName, email, location, bio, role, interests,phoneNumber} = req.body;
+    const { fullName, email, location, bio, role, interests,phoneNumber,instagram,facebook} = req.body;
     const profilePhoto = req.file ? req.file.path : '';
 
     let parsedInterests = [];
@@ -88,6 +90,8 @@ router.post('/update', upload.single('profilePhoto'), async (req, res) => {
         interestEmbedding, // ✅ Store embedding
         profilePhoto,
         phoneNumber,
+        instagram,
+        facebook
       },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
@@ -124,15 +128,17 @@ router.post('/similar', async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         profilePhoto: user.profilePhoto,
-          phoneNumber: user.phoneNumber || '',
+        phoneNumber: user.phoneNumber || '',
         interests: user.interests,
+        instagram: user.instagram,
+        facebook: user.facebook,
         similarity: cosineSimilarity(currentUser.interestEmbedding, user.interestEmbedding),
       };
     });
 
     // Sort by similarity descending
     const sorted = similarities.sort((a, b) => b.similarity - a.similarity);
-    res.json(sorted.slice(0, 5)); // return top 5 similar users
+    res.json(sorted); // return top 5 similar users
   } catch (err) {
     console.error('Error fetching similar users:', err);
     res.status(500).json({ message: 'Server error' });

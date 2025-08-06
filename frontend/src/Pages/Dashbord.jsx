@@ -66,6 +66,29 @@ const SimilarProfiles = () => {
               <div className="mt-2 text-sm text-gray-700">
                 <strong>Interests:</strong> {user.interests.join(', ')}
               </div>
+              <div className="mt-3 flex gap-2">
+                {user.instagram && (
+                  <a
+                    href={user.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600"
+                  >
+                    Instagram
+                  </a>
+                )}
+                {user.facebook && (
+                  <a
+                    href={user.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                  >
+                    Facebook
+                  </a>
+                )}
+              </div>
+
             </div>
           ))}
         </div>

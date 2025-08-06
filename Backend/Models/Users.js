@@ -36,7 +36,7 @@ const Userschema = new mongoose.Schema({
     type: String, // store the file URL or path
     default: ''
   },
- /* instagram: {
+ instagram: {
     type: String,
     trim: true,
     default: ''
@@ -46,7 +46,7 @@ const Userschema = new mongoose.Schema({
     trim: true,
     default: ''
     
-  },*/
+  },
   createdAt: {
     type: Date,
     default: Date.now

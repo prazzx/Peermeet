@@ -13,13 +13,13 @@ export default function Profile() {
       const email = user.email;
       axios.get(`http://localhost:5000/api/profile/get?email=${email}`)
         .then(res => {
-          console.log('Profile API response:', res.data); // 🔍 Debug log
+          console.log('Profile API response:', res.data); 
           
-          // ✅ Handle the API response structure properly
+          
           if (res.data.success && res.data.data) {
             setProfile(res.data.data);
           } else {
-            setProfile(res.data); // Fallback if different structure
+            setProfile(res.data); 
           }
         })
         .catch(err => {
@@ -68,6 +68,35 @@ export default function Profile() {
             <p className="ml-6 text-gray-500">No interests added yet</p>
           )}
         </div>
+        <div className="mt-4">
+  <strong>Social Links:</strong>
+  <div className="flex gap-4 mt-2">
+    {profile.instagram && (
+      <a
+        href={profile.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600"
+      >
+        Instagram
+      </a>
+    )}
+    {profile.facebook && (
+      <a
+        href={profile.facebook}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        Facebook
+      </a>
+    )}
+    {!profile.instagram && !profile.facebook && (
+      <p className="text-gray-500">No social links provided</p>
+    )}
+  </div>
+</div>
+
       </div>
     </div>
   );

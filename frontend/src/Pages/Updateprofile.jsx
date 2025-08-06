@@ -68,8 +68,11 @@ export default function UpdateProfile() {
           location: data.location || '',
           bio: data.bio || '',
           role: data.role || '',
+          profilePhoto: data.profilePhoto,
           interests: data.interests || [],
-          profilePhoto: null, phoneNumber: data.phoneNumber || '',
+          phoneNumber: data.phoneNumber || '',
+          instagram: data.instagram || '',
+          facebook: data.facebook || ''
         });
       } else {
         handleError("Failed to load profile data.");
@@ -127,6 +130,8 @@ export default function UpdateProfile() {
   data.append('role', formData.role);
   data.append('profilePhoto', formData.profilePhoto);
   data.append('phoneNumber', formData.phoneNumber);
+  data.append('instagram', formData.instagram);
+data.append('facebook', formData.facebook);
 
 data.append('interests', JSON.stringify(formData.interests));
 
