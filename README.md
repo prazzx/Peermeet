@@ -1,9 +1,4 @@
-# PeerMeet
-
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)]()
-[![License](https://img.shields.io/badge/license-MIT-green)]()
-[![Issues](https://img.shields.io/github/issues/prazzx/peermeet)]()
-[![Contributors](https://img.shields.io/github/contributors/prazzx/peermeet)]()
+![Version](https://img.shields.io/badge/version-1.0.0-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Contributors](https://img.shields.io/github/contributors/prazzx/peermeet)
 
 ## Table of Contents
 
@@ -24,35 +19,32 @@
 
 ## Description
 
-PeerMeet is a web-based peer-to-peer learning platform designed for university students to teach and learn skills from one another. Students can sign up as **Instructors** or **Learners**, set their hourly rates, schedule sessions, and handle payments directly on the platform. Built with the MERN stack, PeerMeet aims to foster a collaborative learning community and streamline knowledge exchange.
+PeerMeet is a web-based social platform for university students to discover and connect with peers who share similar interests. Instead of predefined Instructor/Learner roles, any student can create a profile highlighting their skills and interests. The system intelligently suggests connections based on interest similarity, fostering a collaborative community for peer-to-peer learning and networking.
 
 ## Features
 
-* **User Roles**:
-
-  * **Instructor**: Create courses, set availability, earn by teaching.
-  * **Learner**: Browse skills, book sessions, make secure payments.
-* **Skill Matching**: Intelligent recommendations based on interest and availability.
-* **Real-time Chat**: In-app messaging to discuss course details.
-* **Video/Audio Calls**: Seamless integration for live teaching (optional).
-* **Payment Gateway**: Secure payment processing with Stripe.
-* **Ratings & Reviews**: Feedback system to ensure quality.
-* **Dashboard**: Personalized dashboards for tracking sessions, earnings, and learning history.
+* **Profile Creation**: Users build profiles with bios, skills, and interests.
+* **Interest Matching**: Uses NLP-based embeddings to calculate similarity scores between profiles and recommend relevant connections.
+* **Similar Profiles Dashboard**: Browse a personalized list of peers sorted by similarity percentage.
+* **Search & Filter**: Filter users by interest tags or keywords.
+* **Authentication**: Secure sign-up and login with Firebase.
+* **Responsive UI**: Clean, mobile-friendly interface built with React and Tailwind.
 
 ## Tech Stack
 
 * **Frontend**: React.js, Tailwind CSS
-* **Backend**: Node.js, Express.js
-* **Database**: MongoDB Atlas
-* **Authentication**: JSON Web Tokens (JWT)
+* **Backend**:
+
+  * Node.js & Express.js (user profile API)
+  * Flask & SentenceTransformers (similarity engine)
+* **Database & Auth**: Firebase (Firestore for profiles, Firebase Auth)
 * **Deployment**: Vercel (frontend), Heroku (backend)
 
 ## Architecture
 
-```
-[ React Frontend ] ←→ [ Express API ] ←→ [ MongoDB Atlas ]
-                   ↕
-               [ Stripe ]
+```text
+[ React Frontend ] ↔ [ Express.js API ] ↕ [ Flask Similarity Service ]
+                         → [ Firebase (Auth & Firestore) ]
 ```
 
 ## Getting Started
@@ -60,16 +52,16 @@ PeerMeet is a web-based peer-to-peer learning platform designed for university s
 ### Prerequisites
 
 * Node.js v14+
-* npm
-* MongoDB Atlas account
-
+* npm or yarn
+* Firebase account
+* Heroku account (for deployment)
 
 ### Installation
 
 1. **Clone repository**
 
    ```bash
-   git clone https://github.com/yourusername/peermeet.git
+   git clone https://github.com/prazzx/peermeet.git
    cd peermeet
    ```
 
@@ -80,63 +72,61 @@ PeerMeet is a web-based peer-to-peer learning platform designed for university s
    cd client
    npm install
 
-   # Backend
+   # Express API
    cd ../server
    npm install
+
+   # Similarity service
+   cd ../similarity-service
+   pip install -r requirements.txt
    ```
 
 ### Running Locally
 
 1. **Configure environment variables**
 
-   * Create a `.env` file in `/server` with:
+   * Frontend (`client/.env`): API base URL, Firebase config.
+   * Server (`server/.env`): FIREBASE\_SERVICE\_ACCOUNT, PORT.
+   * Similarity Service (`similarity-service/.env`): MODEL\_NAME (e.g., `all-MiniLM-L6-v2`).
 
-     ```
-     PORT=5000
-     MONGODB_URI=your_mongo_connection_string
-     JWT_SECRET=your_jwt_secret
-     STRIPE_SECRET_KEY=your_stripe_secret_key
-     ```
-2. **Start backend**
+2. **Start services**
 
    ```bash
-   cd server
+   # Start similarity engine
+   cd similarity-service
+   flask run --port=5001
+
+   # Start API server
+   cd ../server
    npm run dev
-   ```
-3. **Start frontend**
 
-   ```bash
+   # Start frontend
    cd ../client
    npm start
    ```
-4. **Open in browser**
+
+3. **Open in browser**
    Visit `http://localhost:3000` to explore PeerMeet.
 
 ## Usage
 
-1. **Sign Up** as an Instructor or Learner.
-2. **Complete Profile** with bio, skills, and hourly rate (for instructors).
-3. **Browse Skills** or **Create Course**.
-4. **Book a Session**: Select date/time, confirm, and pay.
-5. **Join Session** via in-app video/audio link.
-6. **Rate & Review** your experience.
+1. **Sign Up / Login**: Create an account via Firebase Auth.
+2. **Complete Profile**: Add bio, select interests, and upload an avatar.
+3. **View Suggestions**: Go to "Similar Profiles" to see recommended peers with similarity scores.
+4. **Connect**: Reach out via contact info or integrated messaging (if enabled).
 
 ## API Endpoints
 
-> Base URL: `https://api.peermeet.app` (or `http://localhost:5000` in dev)
+> Base URL: `http://localhost:5000`
 
-| Method | Endpoint               | Description                            |
-| ------ | ---------------------- | -------------------------------------- |
-| POST   | `/api/auth/register`   | Register new user                      |
-| POST   | `/api/auth/login`      | Authenticate and get JWT               |
-| GET    | `/api/users/me`        | Get current user profile               |
-| PUT    | `/api/users/me`        | Update profile                         |
-| GET    | `/api/courses`         | List all courses                       |
-| POST   | `/api/courses`         | Create a new course (Instructors only) |
-| GET    | `/api/courses/:id`     | Get course details                     |
-| POST   | `/api/bookings`        | Book a course session                  |
-| GET    | `/api/bookings/me`     | Get my bookings                        |
-| POST   | `/api/payments/create` | Create Stripe payment intent           |
+| Method | Endpoint             | Description                    |
+| ------ | -------------------- | ------------------------------ |
+| POST   | `/api/auth/register` | Register new user              |
+| POST   | `/api/auth/login`    | Login and receive JWT          |
+| GET    | `/api/users/me`      | Get current user profile       |
+| PUT    | `/api/users/me`      | Update profile                 |
+| GET    | `/api/users`         | List all user profiles         |
+| GET    | `/api/similar/:id`   | Get similarity scores for user |
 
 ## Contributing
 
@@ -152,11 +142,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Contact
-- [@AmanKarn-00](https://github.com/AmanKarn-00)
-- [@prazzx](https://github.com/prazzx)
-- [@coderag10](https://github.com/coderag10)
-- [@Bibesx](https://github.com/Bibesx)
-- [@Solta420](https://github.com/Solta420)
+
+* [@prazzx](https://github.com/prazzx)
+* [@AmanKarn-00](https://github.com/AmanKarn-00)
+* [@coderag10](https://github.com/coderag10)
+* [@Bibesx](https://github.com/Bibesx)
+* [@Solta420](https://github.com/Solta420)
